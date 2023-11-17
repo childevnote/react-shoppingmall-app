@@ -1,10 +1,14 @@
-import { useEffect, useState } from 'react'
-import { Product } from './types';
-import '../styles/Home.css'
+import { useEffect, useState } from "react";
+import { Product } from "./types";
+import "../styles/Home.css";
+import "../styles/Products.css";
+
+function truncate(str: string, n: number) {
+  return str.length > n ? str.slice(0, n - 1) + "..." : str;
+}
 
 export default function Home() {
-
-  const [selectedValue, setSelectedValue] = useState('all');
+  const [selectedValue, setSelectedValue] = useState("all");
   const [products, setProducts] = useState<Product[]>([]);
 
   const handleChange = (e: any) => {
@@ -13,14 +17,16 @@ export default function Home() {
   };
 
   const getCategoryUrl = (category: string): string => {
-    return category === 'all' ? 'https://fakestoreapi.com/products' : `https://fakestoreapi.com/products/category/${category}`;
+    return category === "all"
+      ? "https://fakestoreapi.com/products"
+      : `https://fakestoreapi.com/products/category/${category}`;
   };
 
   const renderButton = (category: string) => (
     <button
       value={category}
       onClick={handleChange}
-      style={{ backgroundColor: `${selectedValue === category ? 'gray' : ''}` }}
+      style={{ backgroundColor: `${selectedValue === category ? "gray" : ""}` }}
     >
       {category}
     </button>
@@ -34,7 +40,7 @@ export default function Home() {
         const data: Product[] = await response.json();
         setProducts(data);
       } catch (error) {
-        console.error('Error fetching products:', error);
+        console.error("Error fetching products:", error);
       }
     };
 
@@ -45,27 +51,25 @@ export default function Home() {
     <div>
       <h1>Products</h1>
       <div className="products-buttons">
-        {renderButton('all')}
-        {renderButton('electronics')}
-        {renderButton('jewelery')}
+        {renderButton("all")}
+        {renderButton("electronics")}
+        {renderButton("jewelery")}
         {renderButton("men's clothing")}
         {renderButton("women's clothing")}
       </div>
+      <p>showing 0 items</p>
       <div className="product-list">
-        <h2>Product List</h2>
-        <ul>
-          {products.map((product) => (
-            <li key={product.id}>
-              <img
-                src={product.image}
-                alt={product.title}
-              />
-              <h3>{product.title}</h3>
-            </li>
-          ))
-          }
-        </ul>
+        {products.map((product) => (
+          <div className="products">
+            <img src={product.image} alt={product.title} />
+            <h3>{truncate(product.title, 20)}</h3>
+            <div className="product-price">
+              <button>Add to Cart</button>
+              <p>$ {product.price}</p>
+            </div>
+          </div>
+        ))}
       </div>
     </div>
-  )
+  );
 }
