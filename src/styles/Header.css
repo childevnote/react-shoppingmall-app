@@ -6,8 +6,32 @@
   height: 60px;
   background-color: #ccc;
   font-size: 20px;
+  z-index: 999;
+  position: fixed;
+  width: 99%;
+  top: 0;
+  left: 0;
+  transition: top 0.3s; /* 헤더의 이동에 트랜지션을 추가합니다. */
 }
 
-.header-buttons{
-  display: flex;
+.visible {
+  top: 0;
+}
+
+.hidden {
+  top: -60px; /* 헤더의 높이만큼 숨김 */
+}
+
+button {
+  transition: all 0.5s ease;
+  cursor: pointer;
+  background-color: transparent;
+  border: 1px solid #ccc;
+  outline: none;
+  font-size: 20px;
+  color: #000;
+  padding: 0 20px;
+  margin: 0 5px 0 5px;
+  height: 60px;
+  border-radius: 5px;
 }
