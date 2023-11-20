@@ -1,15 +1,13 @@
-import React from 'react';
-import './App.css';
-import Header from './components/Header';
-import Home from './components/Home';
+import { Route, Routes } from 'react-router-dom'
+import Root from './Root/Root';
+import ProductDetail from './pages/ProductDetail';
 
 function App() {
   return (
-    <div className="App">
-      <Header/>
-      <Home />
-    </div>
+    <Routes>
+      <Route path="/" element={<Root />} />
+      <Route path="/product/:productId" element={<ProductDetail id={undefined}/>} />
+    </Routes>
   );
 }
-
 export default App;
