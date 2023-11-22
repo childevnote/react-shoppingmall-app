@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
 import { Product } from "./types";
+import { auth } from '../firebase-config';
 import "../styles/Home.css";
 import "../styles/Products.css";
+import { User } from "firebase/auth";
 
-const category = ["all", "electronics", "jewelery", "men's clothing", "women's clothing"]
+const category = ["all", "electronics", "jewelry", "men's clothing", "women's clothing"];
 
 function truncate(str: string, n: number) {
   return str.length > n ? str.slice(0, n - 1) + "..." : str;
@@ -12,11 +14,11 @@ function truncate(str: string, n: number) {
 export default function Home() {
   const [selectedValue, setSelectedValue] = useState("all");
   const [products, setProducts] = useState<Product[]>([]);
-  const [loading, setLoading] = useState(true); // 로딩 상태를 추적
+  const [loading, setLoading] = useState(true);
+  const [user, setUser] = useState<User | null>(null);
 
-  const handleChange = (e: any) => {
-    setSelectedValue(e.target.value);
-    console.log(e.target.value);
+  const handleChange: React.MouseEventHandler<HTMLButtonElement> = (e) => {
+    setSelectedValue(e.currentTarget.value);
   };
 
   const getCategoryUrl = (category: string): string => {
@@ -27,6 +29,7 @@ export default function Home() {
 
   const renderButton = (category: string) => (
     <button
+      key={category}
       value={category}
       onClick={handleChange}
       style={{ backgroundColor: `${selectedValue === category ? "gray" : ""}` }}
@@ -39,7 +42,7 @@ export default function Home() {
     const fetchProducts = async () => {
       try {
         setProducts([]);
-        setLoading(true); // 데이터 로딩 중 상태로 설정
+        setLoading(true);
 
         const url = getCategoryUrl(selectedValue);
         const response = await fetch(url);
@@ -48,12 +51,28 @@ export default function Home() {
       } catch (error) {
         console.error("Error fetching products:", error);
       } finally {
-        setLoading(false); // 데이터 로딩이 완료되면 로딩 상태 해제
+        setLoading(false);
       }
     };
 
     fetchProducts();
   }, [selectedValue]);
+
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged((authUser) => {
+      if (authUser) {
+        sessionStorage.setItem('user', JSON.stringify(authUser));
+        setUser(authUser);
+      } else {
+        sessionStorage.removeItem('user');
+        setUser(null);
+      }
+    });
+
+    return () => {
+      unsubscribe();
+    };
+  }, []);
 
   return (
     <div className="home">
@@ -61,21 +80,27 @@ export default function Home() {
       <div className="products-buttons">
         {category.map((category) => renderButton(category))}
       </div>
-      <p>{loading ? "Loading..." : `showing ${products.length} items`}</p>
-      <div className="product-list">
-        {products.map((product) => (
-          <a href={`/product/${product.id}`}>
-            <div key={product.id} className="products">
-              <img src={product.image} alt={product.title} />
-              <h3>{truncate(product.title, 20)}</h3>
-              <div className="product-price">
-                <button id={product.title} className="addCartBtn">Add to Cart</button>
-                <p>$ {product.price}</p>
-              </div>
-            </div>
-          </a>
-        ))}
-      </div>
+      {user ? (
+        <>
+          <p>{loading ? "Loading..." : `showing ${products.length} items`}</p>
+          <div className="product-list">
+            {products.map((product) => (
+              <a key={product.id} href={`/product/${product.id}`}>
+                <div className="products">
+                  <img src={product.image} alt={product.title} />
+                  <h3>{truncate(product.title, 20)}</h3>
+                  <div className="product-price">
+                    <button id={product.title} className="addCartBtn">Add to Cart</button>
+                    <p>$ {product.price}</p>
+                  </div>
+                </div>
+              </a>
+            ))}
+          </div>
+        </>
+      ) : (
+        <p>Please log in to view products.</p>
+      )}
     </div>
   );
 }

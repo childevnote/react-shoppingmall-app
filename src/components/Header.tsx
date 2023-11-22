@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import '../styles/Header.css';
+import { Link } from 'react-router-dom';
 
 export default function Header() {
   const [prevScrollPos, setPrevScrollPos] = useState(0);
@@ -28,7 +29,7 @@ export default function Header() {
       <div className="header-buttons">
         <button>Cart</button>
         <button>MyPage</button>
-        <button>Logout</button>
+        <button><Link to={'/login'}>Login</Link></button>
       </div>
     </div>
   );
