@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import { Product } from "./types";
+import { onAuthStateChangedListener, FirebaseUser } from "../firebaseService";
+import Login from "../pages/Login";
 import "../styles/Home.css";
 import "../styles/Products.css";
-import { onAuthStateChangedListener, FirebaseUser } from "../firebaseService";
 
 const category = ["all", "electronics", "jewelry", "men's clothing", "women's clothing"];
 
@@ -75,12 +76,13 @@ export default function Home() {
 
   return (
     <div className="home">
-      <h1>Products</h1>
-      <div className="products-buttons">
-        {category.map((category) => renderButton(category))}
-      </div>
       {user ? (
         <>
+          <h1>{user.displayName}, welcome back!</h1>
+          <h2>Products</h2>
+          <div className="products-buttons">
+            {category.map((category) => renderButton(category))}
+          </div>
           <p>{loading ? "Loading..." : `showing ${products.length} items`}</p>
           <div className="product-list">
             {products.map((product) => (
@@ -98,7 +100,7 @@ export default function Home() {
           </div>
         </>
       ) : (
-        <p>Please log in to view products.</p>
+        <Login />
       )}
     </div>
   );

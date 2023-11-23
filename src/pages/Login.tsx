@@ -1,12 +1,10 @@
-// Login.tsx
-import React, { useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { Button } from '@mui/material';
-import { signInWithGoogle, signOutUser, onAuthStateChangedListener, FirebaseUser } from '../firebaseService';
+import { useEffect, useState } from 'react';
+import { signInWithGoogle, onAuthStateChangedListener, FirebaseUser } from '../firebaseService';
+import '../styles/Login.css';
+import { Box, IconButton, Input } from '@mui/material';
 
 const Login = () => {
   const [userData, setUserData] = useState<FirebaseUser | null>(null);
-  const navigate = useNavigate();
 
   useEffect(() => {
     const unsubscribe = onAuthStateChangedListener((user) => {
@@ -29,28 +27,38 @@ const Login = () => {
     }
   };
 
-  const handleGoogleLogout = async () => {
-    try {
-      await signOutUser();
-      setUserData(null);
-      navigate('/');
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   return (
-    <div>
-      <h3>구글 로그인 테스트</h3>
-      <button onClick={handleGoogleLogin}>로그인</button>
-      <button onClick={handleGoogleLogout}>로그아웃</button>
-      <h4>로그인하면 아래쪽에 이름이 나타납니다.</h4>
-      <div>
-        {userData
-          ? `당신의 이름은: ${userData.displayName}`
-          : '로그인 버튼을 눌러주세요 :)'}
-      </div>
-      <Link to={'/'}><Button>홈으로</Button></Link>
+    <div className='login'>
+      <h1>Login</h1>
+      <Box
+        className='login-form'
+        boxShadow={3}
+        padding={5}
+        borderRadius={10}
+      >
+        <Input placeholder='Email' type='email' />
+        <Input placeholder='Password' type='password' />
+        <div className='login_or_register'>
+          <button>Login</button>
+          <button>Register</button>
+        </div>
+        <div className='divider'>
+          <span>OR</span>
+        </div>
+
+        <IconButton
+          id='google-login-button'
+          onClick={handleGoogleLogin}
+          size="medium"
+        >
+          <img
+            src='/assets/googlesignin.png'
+            alt='Google Login'
+            style={{ width: 'inherit', height: 'inherit' }}
+          />
+        </IconButton>
+      </Box>
+
     </div>
   );
 };

@@ -1,0 +1,6 @@
+.product-detail{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin: 50px 10px;
+}

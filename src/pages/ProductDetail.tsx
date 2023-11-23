@@ -1,11 +1,12 @@
 import React from 'react'
 import Header from '../components/Header';
+import '../styles/ProductDetail.css';
 
 const ProductDetail = ({ id }: { id: any }) => {
   console.log(id);
   const productId = id;
   return (
-    <div>
+    <div className='product-detail'>
       <Header />
       <h2>Product Detail</h2>
       <p>Product ID: {productId}</p>
