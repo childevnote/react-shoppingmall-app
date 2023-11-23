@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react";
 import { Product } from "./types";
-import { auth } from '../firebase-config';
 import "../styles/Home.css";
 import "../styles/Products.css";
-import { User } from "firebase/auth";
+import { onAuthStateChangedListener, FirebaseUser } from "../firebaseService";
 
 const category = ["all", "electronics", "jewelry", "men's clothing", "women's clothing"];
 
@@ -15,7 +14,7 @@ export default function Home() {
   const [selectedValue, setSelectedValue] = useState("all");
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<FirebaseUser | null>(null);
 
   const handleChange: React.MouseEventHandler<HTMLButtonElement> = (e) => {
     setSelectedValue(e.currentTarget.value);
@@ -59,10 +58,10 @@ export default function Home() {
   }, [selectedValue]);
 
   useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged((authUser) => {
-      if (authUser) {
-        sessionStorage.setItem('user', JSON.stringify(authUser));
-        setUser(authUser);
+    const unsubscribe = onAuthStateChangedListener((user) => {
+      if (user) {
+        sessionStorage.setItem('user', JSON.stringify(user));
+        setUser(user);
       } else {
         sessionStorage.removeItem('user');
         setUser(null);
