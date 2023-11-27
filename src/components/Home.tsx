@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import { Product } from "./types";
-import { onAuthStateChangedListener, FirebaseUser } from "../firebaseService";
+import { onAuthStateChangedListener, FirebaseUser, getUserDataFromFirestore } from "../firebaseService";
 import Login from "../pages/Login";
 import "../styles/Home.css";
 import "../styles/Products.css";
 
-const category = ["all", "electronics", "jewelry", "men's clothing", "women's clothing"];
+const category = ["all", "electronics", "jewelery", "men's clothing", "women's clothing"];
 
 function truncate(str: string, n: number) {
   return str.length > n ? str.slice(0, n - 1) + "..." : str;
@@ -16,6 +16,7 @@ export default function Home() {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState<FirebaseUser | null>(null);
+  const [userData, setUserData] = useState<any | null>(null);
 
   const handleChange: React.MouseEventHandler<HTMLButtonElement> = (e) => {
     setSelectedValue(e.currentTarget.value);
@@ -59,13 +60,16 @@ export default function Home() {
   }, [selectedValue]);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChangedListener((user) => {
+    const unsubscribe = onAuthStateChangedListener(async (user) => {
       if (user) {
         sessionStorage.setItem('user', JSON.stringify(user));
         setUser(user);
+        const userDataFromFirestore = await getUserDataFromFirestore(user.uid);
+        setUserData(userDataFromFirestore);
       } else {
         sessionStorage.removeItem('user');
         setUser(null);
+        setUserData(null);
       }
     });
 
@@ -78,7 +82,7 @@ export default function Home() {
     <div className="home">
       {user ? (
         <>
-          <h1>{user.displayName}, welcome back!</h1>
+          <h1>{user.displayName || (userData?.name ? userData.name : '')}, welcome back!</h1>
           <h2>Products</h2>
           <div className="products-buttons">
             {category.map((category) => renderButton(category))}
