@@ -1,11 +1,13 @@
 import { useEffect, useState } from 'react';
 import '../styles/Header.css';
 import { FirebaseUser, onAuthStateChangedListener, signOutUser } from '../firebaseService';
+import { Link, useNavigate } from 'react-router-dom';
 
 export default function Header() {
   const [prevScrollPos, setPrevScrollPos] = useState(0);
   const [visible, setVisible] = useState(true);
   const [userData, setUserData] = useState<FirebaseUser | null>(null);
+  const navigate = useNavigate();
 
   const handleGoogleLogout = async () => {
     try {
@@ -36,10 +38,8 @@ export default function Header() {
     const handleScroll = () => {
       const currentScrollPos = window.pageYOffset;
       const isScrolledDown = prevScrollPos < currentScrollPos;
-
       setPrevScrollPos(currentScrollPos);
-
-      setVisible(!isScrolledDown || currentScrollPos < 10); // 스크롤이 최상단에 위치하면 항상 보이도록 설정
+      setVisible(!isScrolledDown || currentScrollPos < 10);
     };
 
     window.addEventListener('scroll', handleScroll);
@@ -49,15 +49,19 @@ export default function Header() {
     };
   }, [prevScrollPos]);
 
+  const handleMyPageButton = () => {
+    navigate('/my-page');
+  }
+
   return (
     <div className={`header ${visible ? 'visible' : 'hidden'}`}>
-      <h2>Shop</h2>
+      <Link to={"/"}><h2>Shop</h2></Link>
       <div className="header-buttons">
         {userData ?
           <><button>Cart</button>
-            <button>MyPage</button>
+            <button onClick={handleMyPageButton}>MyPage</button>
             <button onClick={handleGoogleLogout}>Logout</button>
-            </> : <button>Login required</button>}
+          </> : <button>Login required</button>}
       </div>
     </div>
   );

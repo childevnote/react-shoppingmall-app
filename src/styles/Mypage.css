@@ -1,0 +1,14 @@
+.my-page-container {
+  max-width: 600px;
+  padding: 20px;
+
+  margin-top: 60px; /* Header의 높이만큼 여백을 추가합니다. */
+}
+
+.user-data-container {
+  margin-top: 20px;
+}
+
+.user-data-container p {
+  margin: 8px 0;
+}
