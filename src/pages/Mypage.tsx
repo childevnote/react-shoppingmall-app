@@ -20,18 +20,23 @@ const MyPage = () => {
         setUserData(null);
       }
     });
-
     return () => {
       unsubscribe();
     };
   }, []);
 
   return (
-    <div className="my-page-container"> {/* CSS 클래스 추가 */}
-    <Header />
+    <div className="my-page-container">
+      <Header />
       <h1>My Page</h1>
+      {user?.displayName && (
+        <div className="user-data-container">
+          <p>Name: {user.displayName}</p>
+          {/* Render other user-specific data */}
+        </div>
+      )}
       {userData && (
-        <div className="user-data-container"> {/* CSS 클래스 추가 */}
+        <div className="user-data-container">
           <p>Name: {userData.name}</p>
           <p>Age: {userData.age}</p>
           <p>Gender: {userData.gender}</p>
@@ -41,5 +46,6 @@ const MyPage = () => {
     </div>
   );
 };
+
 
 export default MyPage;

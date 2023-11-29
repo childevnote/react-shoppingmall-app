@@ -4,7 +4,7 @@ import { onAuthStateChangedListener, FirebaseUser, getUserDataFromFirestore } fr
 import Login from "../pages/Login";
 import ProductList from "./ProductList";
 import "../styles/Home.css";
-import "../styles/Products.css";
+
 
 const category = ["all", "electronics", "jewelery", "men's clothing", "women's clothing"];
 
