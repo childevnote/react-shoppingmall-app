@@ -1,6 +1,7 @@
 import React from 'react';
 import { Product } from './types';
 import "../styles/Products.css";
+import { Link } from 'react-router-dom';
 
 interface ProductListProps {
   products: Product[];
@@ -18,7 +19,7 @@ const ProductList: React.FC<ProductListProps> = ({ products, loading }) => {
       <p className='loading or showing'>{loading ? 'Loading...' : `Showing ${products.length} items`}</p>
       <div className="product-list">
         {products.map((product) => (
-          <a key={product.id} href={`/product/${product.id}`}>
+          <Link to={`/product/${product.id}`} key={product.id}>
             <div className="products">
               <img src={product.image} alt={product.title} />
               <h3>{truncate(product.title, 20)}</h3>
@@ -27,7 +28,7 @@ const ProductList: React.FC<ProductListProps> = ({ products, loading }) => {
                 <p>$ {product.price}</p>
               </div>
             </div>
-          </a>
+          </Link>
         ))}
       </div>
     </div>

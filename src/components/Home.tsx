@@ -5,7 +5,6 @@ import Login from "../pages/Login";
 import ProductList from "./ProductList";
 import "../styles/Home.css";
 
-
 const category = ["all", "electronics", "jewelery", "men's clothing", "women's clothing"];
 
 export default function Home() {
