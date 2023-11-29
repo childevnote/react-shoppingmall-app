@@ -7,7 +7,7 @@ function App() {
   return (
     <Routes>
       <Route path="/" element={<Root />} />
-      <Route path="/product/:productId" element={<ProductDetail id={undefined}/>} />
+      <Route path="/product/:productId" element={<ProductDetail />} />
       <Route path="/my-page" element={<MyPage />} />
     </Routes>
   );
