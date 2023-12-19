@@ -1,12 +1,12 @@
-import React, { useState } from 'react'
+// import React, { useState } from 'react'
 import Header from '../components/Header';
 import '../styles/ProductDetail.css';
 import { useParams } from 'react-router-dom';
-import { Product } from '../components/types';
+// import { Product } from '../components/types';
 
 const ProductDetail = () => {
   const { productId } = useParams<{ productId: string }>();
-  const [products, setProducts] = useState<Product[]>([]);
+  // const [products, setProducts] = useState<Product[]>([]);
 
   
   return (

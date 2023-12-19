@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useEffect, useState } from 'react';
 import { signInWithGoogle, onAuthStateChangedListener, FirebaseUser, signInWithEmailAndPassword } from '../firebaseService';
 import { Box, IconButton } from '@mui/material';
